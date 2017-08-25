@@ -1,0 +1,15 @@
+.cell {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  text-align: center;
+
+  .emoji {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+  }
+}
