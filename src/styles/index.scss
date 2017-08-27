@@ -3,6 +3,7 @@
 html {
   overflow: hidden;
   height: 100%;
+  font-size: 62.5%;
 }
 
 body {
@@ -11,6 +12,8 @@ body {
   height: 100%;
   text-align: center;
   color: $wild-sand;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-size: 1.4rem;
 }
 
 * {

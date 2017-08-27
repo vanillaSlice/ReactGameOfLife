@@ -1,34 +1,23 @@
-@import './_fonts.scss';
 @import './_colours.scss';
 
 .App {
   color: $wild-sand;
-  font-family: $font-family;
-  padding: 50px 20px;
-  font-size: 14px;
+  padding: 5rem 0;
+  min-width: 96rem;
 
   .heading {
     font-weight: bold;
-    font-size: 36px;
-    text-shadow: 5px 5px rgba($grape, 0.8);
-    letter-spacing: 5px;
-    margin-bottom: 30px;
+    font-size: 3.6rem;
+    letter-spacing: 0.5rem;
+    margin-bottom: 3rem;
+    text-shadow: 0.5rem 0.5rem rgba($grape, 0.8);
   }
 
   .generation {
     display: block;
-    font-size: 20px;
-    text-shadow: 3px 3px rgba($grape, 0.8);
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    letter-spacing: 0.2rem;
+    margin-bottom: 1rem;
+    text-shadow: 0.3rem 0.3rem rgba($grape, 0.8);
   }
-}
-
-.row {
-  display: inline-flex;
-  margin: 0 20px;
-}
-
-.board {
-  margin: 10px auto;
 }

@@ -1,0 +1,40 @@
+@import './_colours.scss';
+
+@mixin button-selected() {
+  background-color: $wild-sand;
+  color: $grape;
+}
+
+.ToggleButton {
+  input {
+    display: none;
+
+    &:checked + label {
+      @include button-selected();
+    }
+  }
+
+  label {
+    background-color: $grape;
+    color: $wild-sand;
+    padding: 0.6rem 1.2rem;
+    margin: 0.5rem;
+    border-radius: 0.4rem;
+    font-size: inherit;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.05rem;
+    display: inline-block;
+    user-select: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+      @include button-selected();
+    }
+  
+    &:active {
+      transform: translateY(0.1rem);
+    }
+  }
+}
