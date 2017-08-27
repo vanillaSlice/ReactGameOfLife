@@ -14,8 +14,8 @@ class App extends Component {
       isPlaying: false,
       cells: [],
       speed: 500,
-      boardWidth: 40,
-      boardHeight: 20
+      rows: 20,
+      columns: 40
     };
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.handlePauseButtonClick = this.handlePauseButtonClick.bind(this);
@@ -26,29 +26,32 @@ class App extends Component {
     this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
   }
 
-  //////
-
   componentDidMount() {
-    this.setState({cells: this.getRandomCells()});
+    this.setState({cells: this.getNewCells(this.state.rows, this.state.columns)});
   }
 
-  getRandomCells() {
+  getNewCells(numberOfRows, numberOfColumns) {
     const cells = [];
-    for (let row = 0; row < this.state.boardHeight; row++) {
+    for (let row = 0; row < numberOfRows; row++) {
       const columns = [];
-      for (let column = 0; column < this.state.boardWidth; column++) {
-        columns.push(
-          <Cell
-            key={row + '-' + column} 
-            emoji={this.getRandomEmoji()} 
-            alive={this.getRandomBoolean()} 
-            onClick={() => this.handleCellClick(row, column)} 
-          />
-        );
+      for (let column = 0; column < numberOfColumns; column++) {
+        const cell = this.getNewCell(row, column);
+        columns.push(cell);
       }
       cells.push(columns);
     }
     return cells;
+  }
+
+  getNewCell(row, column) {
+    return (
+      <Cell
+        key={row + '-' + column} 
+        emoji={this.getRandomEmoji()} 
+        alive={this.getRandomBoolean()} 
+        onClick={() => this.handleCellClick(row, column)} 
+      />
+    );
   }
 
   getRandomEmoji() {
@@ -64,12 +67,12 @@ class App extends Component {
       const cells = prevState.cells;
       const cell = cells[row][column];
       cells[row][column] = 
-      (<Cell
-        key={row + '-' + column} 
-        emoji={cell.props.emoji} 
-        alive={!cell.props.alive} 
-        onClick={() => this.handleCellClick(row, column)} 
-      />);
+        (<Cell
+          key={cell.key} 
+          emoji={cell.props.emoji} 
+          alive={!cell.props.alive} 
+          onClick={cell.props.onClick}
+        />);
       return {
         cells: cells
       };
@@ -77,25 +80,77 @@ class App extends Component {
   }
 
   handlePlayButtonClick() {
-    if (this.state.isPlaying) return;
+    if (this.state.isPlaying) {
+      return;
+    }
     clearInterval(this.state.interval);
-    const interval = setInterval(() => {
-      this.setState(prevState => ({
-        cells: prevState.cells.map(row => {
-          return row.map(cell => {
-            return (
-            <Cell
-              key={cell.key} 
-              emoji={cell.props.emoji} 
-              alive={!cell.props.alive} 
-              onClick={cell.props.onClick} 
-            />);
-          });
-        }),
-        interval: interval,
-        isPlaying: true
-      }));
-    }, this.state.speed);
+    const interval = setInterval(this.nextGeneration.bind(this), this.state.speed);
+    this.setState({
+      isPlaying: true,
+      interval: interval
+    });
+  }
+
+  nextGeneration() {
+    this.setState(prevState => ({
+      generation: prevState.generation + 1,
+      cells: this.getNextGenerationOfCells(prevState.cells)
+    }));
+  }
+
+  getNextGenerationOfCells(prevCells) {
+    const cells = [];
+    for (let row = 0; row < prevCells.length; row++) {
+      const columns = [];
+      for (let column = 0; column < prevCells[row].length; column++) {
+        const cell = prevCells[row][column];
+        columns.push(this.updateCell(row, column, cell, prevCells));
+      }
+      cells.push(columns);
+    }
+    return cells;
+  }
+
+  updateCell(row, column, cell, prevCells) {
+    const aliveNeighbours = this.countAliveNeighbours(row, column, prevCells);
+    const isAlive = aliveNeighbours === 3 || (cell.props.alive && aliveNeighbours === 2);
+    return (
+      <Cell
+        key={cell.key} 
+        emoji={cell.props.emoji} 
+        alive={isAlive} 
+        onClick={cell.props.onClick} 
+      />
+    );
+  }
+
+  countAliveNeighbours(row, column, prevCells) {
+    let aliveNeighbours = 0; 
+    if (prevCells[row - 1] && prevCells[row-1][column] && prevCells[row - 1][column].props.alive) {
+      aliveNeighbours++;
+    }
+    if (prevCells[row - 1] && prevCells[row - 1][column + 1] && prevCells[row - 1][column + 1].props.alive) {
+      aliveNeighbours++;
+    }
+    if (prevCells[row] && prevCells[row][column + 1] && prevCells[row][column + 1].props.alive) {
+      aliveNeighbours++;
+    }
+    if (prevCells[row + 1] && prevCells[row + 1][column + 1] && prevCells[row + 1][column + 1].props.alive) {
+      aliveNeighbours++;
+    }
+    if (prevCells[row + 1] && prevCells[row + 1][column] && prevCells[row + 1][column].props.alive) {
+      aliveNeighbours++;
+    }
+    if (prevCells[row + 1] && prevCells[row + 1][column - 1] && prevCells[row + 1][column - 1].props.alive) {
+      aliveNeighbours++;
+    }
+    if (prevCells[row] && prevCells[row][column - 1] && prevCells[row][column - 1].props.alive) {
+      aliveNeighbours++;
+    }
+    if (prevCells[row - 1] && prevCells[row - 1][column - 1] && prevCells[row - 1][column - 1].props.alive) {
+      aliveNeighbours++;
+    }
+    return aliveNeighbours;
   }
 
   handlePauseButtonClick() {
@@ -108,34 +163,63 @@ class App extends Component {
 
   handleResetButtonClick() {
     clearInterval(this.state.interval);
-    this.setState({isPlaying: false});
-    this.setState({cells: this.getRandomCells()});
+    this.setState({
+      generation: 0,
+      isPlaying: false,
+      cells: this.getNewCells(this.state.rows, this.state.columns)
+    });
   }
 
   handleClearButtonClick() {
+    clearInterval(this.state.interval);
     this.setState(prevState => ({
+      generation: 0,
+      isPlaying: false,
       cells: prevState.cells.map(row => {
         return row.map(cell => {
-          return <Cell alive={false} key={cell.key} onClick={this.handleClick} />; 
+          return (
+            <Cell
+              key={cell.key} 
+              emoji={cell.props.emoji} 
+              alive={false} 
+              onClick={cell.props.onClick} 
+            />
+          );
         });
       })
     }));
   }
 
   handleSpeedChange(speed) {
-    this.setState(prevState => ({
-      speed: speed
-    }));
+    this.setState({speed: speed});
+    if (!this.state.isPlaying) {
+      return;
+    }
+    clearInterval(this.state.interval);
+    const interval = setInterval(this.nextGeneration.bind(this), speed);
+    this.setState({
+      isPlaying: true,
+      interval: interval
+    });
   }
 
-  handleBoardSizeChange(boardWidth, boardHeight) {
+  handleBoardSizeChange(rows, columns) {
     this.setState(prevState => ({
-      boardWidth: boardWidth,
-      boardHeight: boardHeight
+      generation: 0,
+      cells: this.getNewCells(rows, columns),
+      rows: rows,
+      columns: columns
     }));
+    if (!this.state.isPlaying) {
+      return;
+    }
+    clearInterval(this.state.interval);
+    const interval = setInterval(this.nextGeneration.bind(this), this.state.speed);
+    this.setState({
+      isPlaying: true,
+      interval: interval
+    });
   }
-
-  //////
 
   render() {
     return (
@@ -157,8 +241,8 @@ class App extends Component {
         />
         <BoardSizeControls
           onChange={this.handleBoardSizeChange}
-          boardWidth={this.state.boardWidth}
-          boardHeight={this.state.boardHeight}
+          rows={this.state.rows}
+          columns={this.state.columns}
         />
       </div>
     );

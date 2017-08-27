@@ -10,21 +10,21 @@ const BoardSizeControls = (props) => {
         text="10x10"
         onChange={() => props.onChange(10, 10)}
         id="10x10"
-        checked={props.boardWidth === 10 && props.boardHeight === 10}
+        checked={props.columns === 10 && props.rows === 10}
         name="board-size" 
       />
       <ToggleButton 
         text="20x20"
         onChange={() => props.onChange(20, 20)}
         id="20x20"
-        checked={props.boardWidth === 20 && props.boardHeight === 20}
+        checked={props.columns === 20 && props.rows === 20}
         name="board-size" 
       />
       <ToggleButton 
         text="40x20"
-        onChange={() => props.onChange(40, 20)}
+        onChange={() => props.onChange(20, 40)}
         id="40x20"
-        checked={props.boardWidth === 40 && props.boardHeight === 20}
+        checked={props.columns === 40 && props.rows === 20}
         name="board-size" 
       />
     </div>
