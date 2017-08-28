@@ -1,12 +1,18 @@
 .Board {
-  margin: 1rem auto;
   display: flex;
   flex-direction: column;
 
   .row {
     display: inline-flex;
     justify-content: center;
-    flex-direction: row;
     margin: 0 2rem;
+
+    &:first-child {
+      margin-top: 1rem;
+    }
+
+    &:last-child {
+      margin-bottom: 1rem;
+    }
   }
 }

@@ -1,11 +1,12 @@
 import React from 'react';
-import '../styles/Controls.css';
+
+import ControlLabel from './ControlLabel';
 import ToggleButton from './ToggleButton';
 
 const BoardSizeControls = (props) => {
   return (
-    <div className="Controls BoardSizeControls">
-      <span className="label">Board Size:</span>
+    <div className="BoardSizeControls">
+      <ControlLabel text="Board Size:" />
       <ToggleButton 
         text="10x10"
         onChange={() => props.onChange(10, 10)}

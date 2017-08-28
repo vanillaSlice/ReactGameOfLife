@@ -1,6 +1,6 @@
 @import './_colours.scss';
 
-@mixin button-selected() {
+@mixin button-highlighted() {
   background-color: $wild-sand;
   color: $grape;
 }
@@ -8,10 +8,10 @@
 .ToggleButton {
   input {
     display: none;
+  }
 
-    &:checked + label {
-      @include button-selected();
-    }
+  input:checked + label {
+    @include button-highlighted();
   }
 
   label {
@@ -30,7 +30,7 @@
     &:hover,
     &:active,
     &:focus {
-      @include button-selected();
+      @include button-highlighted();
     }
   
     &:active {
