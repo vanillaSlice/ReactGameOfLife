@@ -14,14 +14,24 @@ See [Wikipedia](https://en.wikipedia.org/wiki/Conway's_Game_of_Life) for more in
 
 This implementation is built using React. A working version can be viewed [here](https://vanillaslice.github.io/ReactGameOfLife/).
 
-## Running Locally
-
-To view locally, run:
-```
-npm install
-npm start
-```
-
-Then open [http://localhost:3000/](http://localhost:3000/).
-
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+
+## Installing dependencies
+```
+yarn install
+```
+
+## Running locally
+```
+yarn start
+```
+
+## Run tests
+```
+yarn test
+```
+
+## Deploy
+```
+yarn deploy
+```
