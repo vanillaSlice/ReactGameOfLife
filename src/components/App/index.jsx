@@ -1,36 +1,61 @@
 import React, { Component } from 'react';
 
-import MainControls from './MainControls'
-import Board from './Board';
-import Cell from './Cell';
-import SpeedControls from './SpeedControls';
-import BoardSizeControls from './BoardSizeControls';
+import MainControls from '../MainControls';
+import Board from '../Board';
+import Cell from '../Cell';
+import SpeedControls from '../SpeedControls';
+import BoardSizeControls from '../BoardSizeControls';
 
-import '../styles/App.css';
+import './index.css';
+
+function getRandomEmoji() {
+  return `&#${(Math.floor(Math.random() * (128567 - 128514)) + 128513)};`;
+}
+
+function getRandomBoolean() {
+  return Math.random() >= 0.5;
+}
 
 class App extends Component {
-  state = {
-    isPlaying: false,
-    generation: 0,
-    cells: [],
-    speed: 500,
-    rows: 20,
-    columns: 40
-  };
+  constructor(props) {
+    super(props);
 
-  componentDidMount = () => {
+    this.state = {
+      isPlaying: false,
+      generation: 0,
+      cells: [],
+      speed: 500,
+      rows: 20,
+      columns: 40,
+    };
+
+    this.getNewCells = this.getNewCells.bind(this);
+    this.getNewCell = this.getNewCell.bind(this);
+    this.handleCellClick = this.handleCellClick.bind(this);
+    this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
+    this.nextGeneration = this.nextGeneration.bind(this);
+    this.getNextGenerationOfCells = this.getNextGenerationOfCells.bind(this);
+    this.countAliveNeighbours = this.countAliveNeighbours.bind(this);
+    this.handlePauseButtonClick = this.handlePauseButtonClick.bind(this);
+    this.handleResetButtonClick = this.handleResetButtonClick.bind(this);
+    this.handleClearButtonClick = this.handleClearButtonClick.bind(this);
+    this.handleSpeedChange = this.handleSpeedChange.bind(this);
+    this.handleBoardSizeChange = this.handleBoardSizeChange.bind(this);
+  }
+
+  componentWillMount() {
     this.setState({
-      cells: this.getNewCells(this.state.rows, this.state.columns)
+      cells: this.getNewCells(this.state.rows, this.state.columns),
     });
   }
 
-  getNewCells = (rows, columns) => {
+  getNewCells(rows, columns) {
     const cells = [];
 
-    for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < rows; rowIndex += 1) {
       const row = [];
 
-      for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
+      for (let columnIndex = 0; columnIndex < columns; columnIndex += 1) {
         const cell = this.getNewCell(rowIndex, columnIndex);
         row.push(cell);
       }
@@ -41,26 +66,18 @@ class App extends Component {
     return cells;
   }
 
-  getNewCell = (rowIndex, columnIndex) => {
+  getNewCell(rowIndex, columnIndex) {
     return (
       <Cell
-        key={rowIndex + '-' + columnIndex} 
-        emoji={this.getRandomEmoji()} 
-        alive={this.getRandomBoolean()} 
-        onClick={() => this.handleCellClick(rowIndex, columnIndex)} 
+        key={`${rowIndex}-${columnIndex}`}
+        emoji={getRandomEmoji()}
+        alive={getRandomBoolean()}
+        onClick={() => this.handleCellClick(rowIndex, columnIndex)}
       />
     );
   }
 
-  getRandomEmoji = () => {
-    return '&#' + (Math.floor(Math.random() * (128567 - 128513 + 1)) + 128513) + ';';
-  }
-
-  getRandomBoolean = () => {
-    return Math.random() >= 0.5;
-  }
-
-  handleCellClick = (rowIndex, columnIndex) => {
+  handleCellClick(rowIndex, columnIndex) {
     this.setState(prevState => {
       const cells = prevState.cells;
       const cell = cells[rowIndex][columnIndex];
@@ -75,13 +92,11 @@ class App extends Component {
 
       cells[rowIndex][columnIndex] = updatedCell;
 
-      return {
-        cells: cells
-      };
+      return { cells };
     });
   }
 
-  handlePlayButtonClick = () => {
+  handlePlayButtonClick() {
     if (this.state.isPlaying) {
       return;
     }
@@ -90,40 +105,38 @@ class App extends Component {
     const interval = setInterval(this.nextGeneration, this.state.speed);
     this.setState({
       isPlaying: true,
-      interval: interval
+      interval,
     });
   }
 
-  nextGeneration = () => {
+  nextGeneration() {
     this.setState(prevState => ({
       generation: prevState.generation + 1,
-      cells: this.getNextGenerationOfCells(prevState)
+      cells: this.getNextGenerationOfCells(prevState),
     }));
   }
 
-  getNextGenerationOfCells = (prevState) => {
-    return prevState.cells.map((row, rowIndex) => {
-      return row.map((cell, columnIndex) => {
-        return this.getCellInNextGeneration(rowIndex, columnIndex, cell, prevState);
-      });
-    });
+  getNextGenerationOfCells(prevState) {
+    return prevState.cells.map((row, rowIndex) =>
+      row.map((cell, columnIndex) =>
+        this.getCellInNextGeneration(rowIndex, columnIndex, cell, prevState)));
   }
 
-  getCellInNextGeneration = (rowIndex, columnIndex, cell, prevState) => {
+  getCellInNextGeneration(rowIndex, columnIndex, cell, prevState) {
     const aliveNeighbours = this.countAliveNeighbours(rowIndex, columnIndex, prevState);
     const alive = (cell.props.alive && aliveNeighbours === 2) || aliveNeighbours === 3;
 
     return (
       <Cell
-        key={cell.key} 
-        emoji={cell.props.emoji} 
-        alive={alive} 
-        onClick={cell.props.onClick} 
+        key={cell.key}
+        emoji={cell.props.emoji}
+        alive={alive}
+        onClick={cell.props.onClick}
       />
     );
   }
 
-  countAliveNeighbours = (rowIndex, columnIndex, prevState) => {
+  countAliveNeighbours(rowIndex, columnIndex, prevState) {
     const cells = prevState.cells;
     const numberOfRows = prevState.rows;
     const numberOfColumns = prevState.columns;
@@ -163,25 +176,25 @@ class App extends Component {
     return aliveNeighbours;
   }
 
-  handlePauseButtonClick = () => {
+  handlePauseButtonClick() {
     if (!this.state.isPlaying) {
       return;
     }
 
     clearInterval(this.state.interval);
-    this.setState({isPlaying: false});
+    this.setState({ isPlaying: false });
   }
 
-  handleResetButtonClick = () => {
+  handleResetButtonClick() {
     clearInterval(this.state.interval);
     this.setState({
       isPlaying: false,
       generation: 0,
-      cells: this.getNewCells(this.state.rows, this.state.columns)
+      cells: this.getNewCells(this.state.rows, this.state.columns),
     });
   }
 
-  handleClearButtonClick = () => {
+  handleClearButtonClick() {
     clearInterval(this.state.interval);
     this.setState(prevState => {
       const updatedCells = prevState.cells.map(row => {
@@ -200,13 +213,13 @@ class App extends Component {
       return {
         generation: 0,
         isPlaying: false,
-        cells: updatedCells
+        cells: updatedCells,
       };
     });
   }
 
-  handleSpeedChange = (speed) => {
-    this.setState({speed: speed});
+  handleSpeedChange(speed) {
+    this.setState({ speed });
 
     if (!this.state.isPlaying) {
       return;
@@ -216,27 +229,27 @@ class App extends Component {
     const interval = setInterval(this.nextGeneration, speed);
     this.setState({
       isPlaying: true,
-      interval: interval
+      interval,
     });
   }
 
-  handleBoardSizeChange = (rows, columns) => {
-    this.setState(prevState => ({
+  handleBoardSizeChange(rows, columns) {
+    this.setState({
       generation: 0,
       cells: this.getNewCells(rows, columns),
-      rows: rows,
-      columns: columns
-    }));
+      rows,
+      columns,
+    });
 
     if (!this.state.isPlaying) {
       return;
     }
-    
+
     clearInterval(this.state.interval);
     const interval = setInterval(this.nextGeneration, this.state.speed);
     this.setState({
       isPlaying: true,
-      interval: interval
+      interval,
     });
   }
 
@@ -247,14 +260,14 @@ class App extends Component {
           Game <span role="img" aria-label="Smiling Face">&#128515;</span>f Life
         </h1>
         <span className="generation">Generation - {this.state.generation}</span>
-        <MainControls 
+        <MainControls
           onPlayButtonClick={this.handlePlayButtonClick}
           onPauseButtonClick={this.handlePauseButtonClick}
           onResetButtonClick={this.handleResetButtonClick}
           onClearButtonClick={this.handleClearButtonClick}
         />
         <Board cells={this.state.cells} />
-        <SpeedControls 
+        <SpeedControls
           onChange={this.handleSpeedChange}
           speed={this.state.speed}
         />

@@ -4,8 +4,10 @@ import ReactDOM from 'react-dom';
 import App from './components/App';
 import registerServiceWorker from './registerServiceWorker';
 
-import 'reset-css/reset.css';
-import './styles/index.css';
+import '../node_modules/normalize.css/normalize.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import './index.css';
+
+ReactDOM.render(React.createElement(App), document.getElementById('root'));
+
 registerServiceWorker();

@@ -1,8 +1,8 @@
-.Board {
+.board {
   display: flex;
   flex-direction: column;
 
-  .row {
+  .board__row {
     display: inline-flex;
     justify-content: center;
     margin: 0 2rem;

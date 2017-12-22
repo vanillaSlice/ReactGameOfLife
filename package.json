@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "enzyme": "^3.2.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "node-sass-chokidar": "^0.0.3",
+    "normalize.css": "^7.0.0",
+    "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "^1.0.17",
@@ -18,7 +22,8 @@
     "gh-pages": "^1.1.0",
     "npm-run-all": "^4.1.2",
     "stylelint": "^8.4.0",
-    "stylelint-config-standard": "^18.0.0"
+    "stylelint-config-recommended-scss": "^3.0.0",
+    "stylelint-scss": "^2.2.0"
   },
   "homepage": "https://vanillaslice.github.io/ReactGameOfLife",
   "scripts": {
