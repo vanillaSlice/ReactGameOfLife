@@ -16,6 +16,66 @@ function getRandomBoolean() {
   return Math.random() >= 0.5;
 }
 
+function countAliveNeighbours(rowIndex, columnIndex, prevState) {
+  const { cells } = prevState;
+  const numberOfRows = prevState.rows;
+  const numberOfColumns = prevState.columns;
+  // wrap around indices eg in 5x5 board (-1,-1) would become (4,4)
+  const north = ((rowIndex - 1) + numberOfRows) % numberOfRows;
+  const east = (columnIndex + 1 + numberOfColumns) % numberOfColumns;
+  const south = (rowIndex + 1 + numberOfRows) % numberOfRows;
+  const west = ((columnIndex - 1) + numberOfColumns) % numberOfColumns;
+
+  let aliveNeighbours = 0;
+
+  if (cells[north][columnIndex].props.alive) {
+    aliveNeighbours += 1;
+  }
+  if (cells[north][east].props.alive) {
+    aliveNeighbours += 1;
+  }
+  if (cells[rowIndex][east].props.alive) {
+    aliveNeighbours += 1;
+  }
+  if (cells[south][east].props.alive) {
+    aliveNeighbours += 1;
+  }
+  if (cells[south][columnIndex].props.alive) {
+    aliveNeighbours += 1;
+  }
+  if (cells[south][west].props.alive) {
+    aliveNeighbours += 1;
+  }
+  if (cells[rowIndex][west].props.alive) {
+    aliveNeighbours += 1;
+  }
+  if (cells[north][west].props.alive) {
+    aliveNeighbours += 1;
+  }
+
+  return aliveNeighbours;
+}
+
+function getCellInNextGeneration(rowIndex, columnIndex, cell, prevState) {
+  const aliveNeighbours = countAliveNeighbours(rowIndex, columnIndex, prevState);
+  const alive = (cell.props.alive && aliveNeighbours === 2) || aliveNeighbours === 3;
+
+  return (
+    <Cell
+      key={cell.key}
+      emoji={cell.props.emoji}
+      alive={alive}
+      onClick={cell.props.onClick}
+    />
+  );
+}
+
+function getNextGenerationOfCells(prevState) {
+  return prevState.cells.map((row, rowIndex) =>
+    row.map((cell, columnIndex) =>
+      getCellInNextGeneration(rowIndex, columnIndex, cell, prevState)));
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -34,8 +94,6 @@ class App extends Component {
     this.handleCellClick = this.handleCellClick.bind(this);
     this.handlePlayButtonClick = this.handlePlayButtonClick.bind(this);
     this.nextGeneration = this.nextGeneration.bind(this);
-    this.getNextGenerationOfCells = this.getNextGenerationOfCells.bind(this);
-    this.countAliveNeighbours = this.countAliveNeighbours.bind(this);
     this.handlePauseButtonClick = this.handlePauseButtonClick.bind(this);
     this.handleResetButtonClick = this.handleResetButtonClick.bind(this);
     this.handleClearButtonClick = this.handleClearButtonClick.bind(this);
@@ -78,14 +136,14 @@ class App extends Component {
   }
 
   handleCellClick(rowIndex, columnIndex) {
-    this.setState(prevState => {
-      const cells = prevState.cells;
+    this.setState((prevState) => {
+      const { cells } = prevState;
       const cell = cells[rowIndex][columnIndex];
       const updatedCell = (
         <Cell
-          key={cell.key} 
-          emoji={cell.props.emoji} 
-          alive={!cell.props.alive} 
+          key={cell.key}
+          emoji={cell.props.emoji}
+          alive={!cell.props.alive}
           onClick={cell.props.onClick}
         />
       );
@@ -112,68 +170,8 @@ class App extends Component {
   nextGeneration() {
     this.setState(prevState => ({
       generation: prevState.generation + 1,
-      cells: this.getNextGenerationOfCells(prevState),
+      cells: getNextGenerationOfCells(prevState),
     }));
-  }
-
-  getNextGenerationOfCells(prevState) {
-    return prevState.cells.map((row, rowIndex) =>
-      row.map((cell, columnIndex) =>
-        this.getCellInNextGeneration(rowIndex, columnIndex, cell, prevState)));
-  }
-
-  getCellInNextGeneration(rowIndex, columnIndex, cell, prevState) {
-    const aliveNeighbours = this.countAliveNeighbours(rowIndex, columnIndex, prevState);
-    const alive = (cell.props.alive && aliveNeighbours === 2) || aliveNeighbours === 3;
-
-    return (
-      <Cell
-        key={cell.key}
-        emoji={cell.props.emoji}
-        alive={alive}
-        onClick={cell.props.onClick}
-      />
-    );
-  }
-
-  countAliveNeighbours(rowIndex, columnIndex, prevState) {
-    const cells = prevState.cells;
-    const numberOfRows = prevState.rows;
-    const numberOfColumns = prevState.columns;
-    // wrap around indices eg in 5x5 board (-1,-1) would become (4,4)
-    const north = (rowIndex - 1 + numberOfRows) % numberOfRows;
-    const east = (columnIndex + 1 + numberOfColumns) % numberOfColumns;
-    const south = (rowIndex + 1 + numberOfRows) % numberOfRows;
-    const west = (columnIndex - 1 + numberOfColumns) % numberOfColumns;
-
-    let aliveNeighbours = 0;
-
-    if (cells[north][columnIndex].props.alive) {
-      aliveNeighbours++;
-    }
-    if (cells[north][east].props.alive) {
-      aliveNeighbours++;
-    }
-    if (cells[rowIndex][east].props.alive) {
-      aliveNeighbours++;
-    }
-    if (cells[south][east].props.alive) {
-      aliveNeighbours++;
-    }
-    if (cells[south][columnIndex].props.alive) {
-      aliveNeighbours++;
-    }
-    if (cells[south][west].props.alive) {
-      aliveNeighbours++;
-    }
-    if (cells[rowIndex][west].props.alive) {
-      aliveNeighbours++;
-    }
-    if (cells[north][west].props.alive) {
-      aliveNeighbours++;
-    }
-
-    return aliveNeighbours;
   }
 
   handlePauseButtonClick() {
@@ -196,19 +194,15 @@ class App extends Component {
 
   handleClearButtonClick() {
     clearInterval(this.state.interval);
-    this.setState(prevState => {
-      const updatedCells = prevState.cells.map(row => {
-        return row.map(cell => {
-          return (
-            <Cell
-              key={cell.key} 
-              emoji={cell.props.emoji} 
-              alive={false} 
-              onClick={cell.props.onClick} 
-            />
-          );
-        });
-      });
+    this.setState((prevState) => {
+      const updatedCells = prevState.cells.map(row =>
+        row.map(cell => (
+          <Cell
+            key={cell.key}
+            emoji={cell.props.emoji}
+            alive={false}
+            onClick={cell.props.onClick}
+          />)));
 
       return {
         generation: 0,
@@ -255,11 +249,11 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <h1 className="heading">
+      <div className="app">
+        <h1 className="app__heading">
           Game <span role="img" aria-label="Smiling Face">&#128515;</span>f Life
         </h1>
-        <span className="generation">Generation - {this.state.generation}</span>
+        <span className="app__generation">Generation - {this.state.generation}</span>
         <MainControls
           onPlayButtonClick={this.handlePlayButtonClick}
           onPauseButtonClick={this.handlePauseButtonClick}

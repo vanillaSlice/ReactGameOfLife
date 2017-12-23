@@ -1,17 +1,18 @@
-.App {
+.app {
   color: #f5f5f5;
   min-width: 96rem;
   padding: 5rem 0;
 
-  .heading {
-    font-weight: bold;
+  .app__heading {
     font-size: 3.6rem;
+    font-weight: bold;
     letter-spacing: 0.5rem;
+    margin-top: 0;
     margin-bottom: 3rem;
     text-shadow: 0.5rem 0.5rem rgba(#4c225d, 0.8);
   }
 
-  .generation {
+  .app__generation {
     display: block;
     font-size: 2rem;
     letter-spacing: 0.2rem;
