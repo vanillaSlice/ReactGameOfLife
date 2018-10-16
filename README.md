@@ -30,8 +30,3 @@ yarn start
 ```
 yarn test
 ```
-
-## Deploy
-```
-yarn deploy
-```
