@@ -1,4 +1,5 @@
 # React Game of Life
+[![Build Status](https://travis-ci.org/vanillaSlice/ReactGameOfLife.svg?branch=master)](https://travis-ci.org/vanillaSlice/ReactGameOfLife)
 
 Game of Life is a cellular automaton devised by mathematician John Conway.
 
