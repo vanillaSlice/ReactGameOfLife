@@ -27,10 +27,10 @@
     "build": "run-s build:css build:js",
     "build:css": "node-sass-chokidar src/ -o src/",
     "build:js": "react-scripts build",
-    "test": "run-s test:lint test:unit",
-    "test:lint": "run-s test:lint:js test:lint:css",
+    "test": "run-s build:css test:lint test:unit",
+    "test:lint": "run-s test:lint:js test:lint:scss",
     "test:lint:js": "eslint --ext=js --ext=jsx src/",
-    "test:lint:css": "stylelint src/**/*.scss",
+    "test:lint:scss": "stylelint src/**/*.scss",
     "test:unit": "react-scripts test --env=jsdom --coverage --colors",
     "coveralls": "cat coverage/lcov.info | node node_modules/.bin/coveralls",
     "eject": "react-scripts eject"
