@@ -1,5 +1,6 @@
 {
   "name": "React Game of Life",
+  "short_name": "React Game of Life",
   "icons": [{
       "src": "./android-chrome-192x192.png",
       "sizes": "192x192",
