@@ -1,16 +1,19 @@
 language: node_js
+branches:
+  only:
+    - master
 node_js:
-  - "stable"
-cache:
-  directories:
-  - node_modules
+  - stable
+cache: npm
 script:
-  - yarn test
-  - yarn build
+  - npm run test
+  - if [[ $TRAVIS_BRANCH = 'master' && $TRAVIS_PULL_REQUEST = 'false' ]]; then npm run build; fi
+after_script:
+  - npm run coveralls
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: $github_token
+  github_token: $GITHUB_TOKEN
   local_dir: build
   on:
     branch: master
