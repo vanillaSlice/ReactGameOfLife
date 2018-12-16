@@ -3,11 +3,15 @@ import PropTypes from 'prop-types';
 
 import './index.css';
 
-const Button = props => (
-  <button className="btn" type="button" onClick={props.onClick}>
-    {props.text}
-  </button>
-);
+const Button = (props) => {
+  const { onClick, text } = props;
+
+  return (
+    <button className="btn" type="button" onClick={onClick}>
+      {text}
+    </button>
+  );
+};
 
 Button.propTypes = {
   onClick: PropTypes.func.isRequired,

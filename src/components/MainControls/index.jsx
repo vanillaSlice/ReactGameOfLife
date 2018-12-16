@@ -3,14 +3,23 @@ import PropTypes from 'prop-types';
 
 import Button from '../Button';
 
-const MainControls = props => (
-  <div className="main-ctrls">
-    <Button text="Play" onClick={props.onPlayButtonClick} />
-    <Button text="Pause" onClick={props.onPauseButtonClick} />
-    <Button text="Reset" onClick={props.onResetButtonClick} />
-    <Button text="Clear" onClick={props.onClearButtonClick} />
-  </div>
-);
+const MainControls = (props) => {
+  const {
+    onPlayButtonClick,
+    onPauseButtonClick,
+    onResetButtonClick,
+    onClearButtonClick,
+  } = props;
+
+  return (
+    <div className="main-ctrls">
+      <Button text="Play" onClick={onPlayButtonClick} />
+      <Button text="Pause" onClick={onPauseButtonClick} />
+      <Button text="Reset" onClick={onResetButtonClick} />
+      <Button text="Clear" onClick={onClearButtonClick} />
+    </div>
+  );
+};
 
 MainControls.propTypes = {
   onPlayButtonClick: PropTypes.func.isRequired,

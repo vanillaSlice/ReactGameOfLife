@@ -3,9 +3,13 @@ import PropTypes from 'prop-types';
 
 import './index.css';
 
-const ControlLabel = props => (
-  <span className="ctrl-label">{props.text}</span>
-);
+const ControlLabel = (props) => {
+  const { text } = props;
+
+  return (
+    <span className="ctrl-label">{text}</span>
+  );
+};
 
 ControlLabel.propTypes = {
   text: PropTypes.string.isRequired,

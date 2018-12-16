@@ -3,21 +3,31 @@ import PropTypes from 'prop-types';
 
 import './index.css';
 
-const ToggleButton = props => (
-  <label className="toggle-btn" htmlFor={props.id}>
-    <input
-      className="toggle-btn__input"
-      type="radio"
-      id={props.id}
-      name={props.name}
-      onChange={props.onChange}
-      checked={props.checked}
-    />
-    <span className="toggle-btn__text">
-      {props.text}
-    </span>
-  </label>
-);
+const ToggleButton = (props) => {
+  const {
+    id,
+    name,
+    onChange,
+    checked,
+    text,
+  } = props;
+
+  return (
+    <label className="toggle-btn" htmlFor={id}>
+      <input
+        className="toggle-btn__input"
+        type="radio"
+        id={id}
+        name={name}
+        onChange={onChange}
+        checked={checked}
+      />
+      <span className="toggle-btn__text">
+        {text}
+      </span>
+    </label>
+  );
+};
 
 ToggleButton.propTypes = {
   id: PropTypes.string.isRequired,

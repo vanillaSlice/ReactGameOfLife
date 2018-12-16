@@ -10,16 +10,15 @@ import PropTypes from 'prop-types';
 
 import './index.css';
 
-const Cell = props => (
-  <div className="cell" onClick={props.onClick}>
-    {props.alive &&
-      <span
-        className="cell__emoji"
-        dangerouslySetInnerHTML={{ __html: props.emoji }}
-      />
-    }
-  </div>
-);
+const Cell = (props) => {
+  const { onClick, alive, emoji } = props;
+
+  return (
+    <div className="cell" onClick={onClick}>
+      {alive && <span className="cell__emoji" dangerouslySetInnerHTML={{ __html: emoji }} />}
+    </div>
+  );
+};
 
 Cell.propTypes = {
   onClick: PropTypes.func.isRequired,
