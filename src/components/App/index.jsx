@@ -71,9 +71,8 @@ function getCellInNextGeneration(rowIndex, columnIndex, cell, prevState) {
 }
 
 function getNextGenerationOfCells(prevState) {
-  return prevState.cells.map((row, rowIndex) =>
-    row.map((cell, columnIndex) =>
-      getCellInNextGeneration(rowIndex, columnIndex, cell, prevState)));
+  return prevState.cells.map((row, rowIndex) => row
+    .map((cell, columnIndex) => getCellInNextGeneration(rowIndex, columnIndex, cell, prevState)));
 }
 
 class App extends Component {
@@ -102,8 +101,9 @@ class App extends Component {
   }
 
   componentWillMount() {
+    const { rows, columns } = this.state;
     this.setState({
-      cells: this.getNewCells(this.state.rows, this.state.columns),
+      cells: this.getNewCells(rows, columns),
     });
   }
 
@@ -155,15 +155,17 @@ class App extends Component {
   }
 
   handlePlayButtonClick() {
-    if (this.state.isPlaying) {
+    const { isPlaying, interval, speed } = this.state;
+
+    if (isPlaying) {
       return;
     }
 
-    clearInterval(this.state.interval);
-    const interval = setInterval(this.nextGeneration, this.state.speed);
+    clearInterval(interval);
+    const newInterval = setInterval(this.nextGeneration, speed);
     this.setState({
       isPlaying: true,
-      interval,
+      interval: newInterval,
     });
   }
 
@@ -175,34 +177,39 @@ class App extends Component {
   }
 
   handlePauseButtonClick() {
-    if (!this.state.isPlaying) {
+    const { isPlaying, interval } = this.state;
+
+    if (!isPlaying) {
       return;
     }
 
-    clearInterval(this.state.interval);
+    clearInterval(interval);
     this.setState({ isPlaying: false });
   }
 
   handleResetButtonClick() {
-    clearInterval(this.state.interval);
+    const { interval, rows, columns } = this.state;
+
+    clearInterval(interval);
     this.setState({
       isPlaying: false,
       generation: 0,
-      cells: this.getNewCells(this.state.rows, this.state.columns),
+      cells: this.getNewCells(rows, columns),
     });
   }
 
   handleClearButtonClick() {
-    clearInterval(this.state.interval);
+    const { interval } = this.state;
+
+    clearInterval(interval);
     this.setState((prevState) => {
-      const updatedCells = prevState.cells.map(row =>
-        row.map(cell => (
-          <Cell
-            key={cell.key}
-            emoji={cell.props.emoji}
-            alive={false}
-            onClick={cell.props.onClick}
-          />)));
+      const updatedCells = prevState.cells.map(row => row.map(cell => (
+        <Cell
+          key={cell.key}
+          emoji={cell.props.emoji}
+          alive={false}
+          onClick={cell.props.onClick}
+        />)));
 
       return {
         generation: 0,
@@ -213,21 +220,25 @@ class App extends Component {
   }
 
   handleSpeedChange(speed) {
+    const { isPlaying, interval } = this.state;
+
     this.setState({ speed });
 
-    if (!this.state.isPlaying) {
+    if (!isPlaying) {
       return;
     }
 
-    clearInterval(this.state.interval);
-    const interval = setInterval(this.nextGeneration, speed);
+    clearInterval(interval);
+    const newInterval = setInterval(this.nextGeneration, speed);
     this.setState({
       isPlaying: true,
-      interval,
+      interval: newInterval,
     });
   }
 
   handleBoardSizeChange(rows, columns) {
+    const { isPlaying, interval, speed } = this.state;
+
     this.setState({
       generation: 0,
       cells: this.getNewCells(rows, columns),
@@ -235,40 +246,54 @@ class App extends Component {
       columns,
     });
 
-    if (!this.state.isPlaying) {
+    if (!isPlaying) {
       return;
     }
 
-    clearInterval(this.state.interval);
-    const interval = setInterval(this.nextGeneration, this.state.speed);
+    clearInterval(interval);
+    const newInterval = setInterval(this.nextGeneration, speed);
     this.setState({
       isPlaying: true,
-      interval,
+      interval: newInterval,
     });
   }
 
   render() {
+    const {
+      generation,
+      cells,
+      speed,
+      rows,
+      columns,
+    } = this.state;
+
     return (
       <div className="app">
         <h1 className="app__heading">
-          Game <span role="img" aria-label="Smiling Face">&#128515;</span>f Life
+          Game
+          <span role="img" aria-label="Smiling Face">&#128515;</span>
+          f
+          Life
         </h1>
-        <span className="app__generation">Generation - {this.state.generation}</span>
+        <span className="app__generation">
+          Generation -&nbsp;
+          {generation}
+        </span>
         <MainControls
           onPlayButtonClick={this.handlePlayButtonClick}
           onPauseButtonClick={this.handlePauseButtonClick}
           onResetButtonClick={this.handleResetButtonClick}
           onClearButtonClick={this.handleClearButtonClick}
         />
-        <Board cells={this.state.cells} />
+        <Board cells={cells} />
         <SpeedControls
           onChange={this.handleSpeedChange}
-          speed={this.state.speed}
+          speed={speed}
         />
         <BoardSizeControls
           onChange={this.handleBoardSizeChange}
-          rows={this.state.rows}
-          columns={this.state.columns}
+          rows={rows}
+          columns={columns}
         />
       </div>
     );
