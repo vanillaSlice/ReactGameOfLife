@@ -5,33 +5,66 @@
 [![Coverage Status](https://img.shields.io/coveralls/github/vanillaSlice/ReactGameOfLife/master.svg)](https://coveralls.io/github/vanillaSlice/ReactGameOfLife?branch=master)
 [![License](https://img.shields.io/github/license/vanillaSlice/ReactGameOfLife.svg)](LICENSE)
 
-Game of Life is a cellular automaton devised by mathematician John Conway.
+*The Game of Life* is a cellular automaton devised by mathematician John Conway.
 
 In the game there exists a grid of cells, each of which can be in one of two states, *alive* or *dead*.
-Every cell has eight neighbours which it interacts with (the adjacent cells). After each step in the game, the following rules apply:
+Every cell has eight neighbours (adjacent cells) which it interacts with. After each step in the game, the following
+rules apply:
 
-1. Any live cell with fewer than two live neighbours dies, i.e. under population
-2. Any live cell with two or three live neighbours lives on to the next generation
-3. Any live cell with more than three live neighbours dies, i.e. overpopulation
-4. Any dead cell with exactly three live neighbours becomes a live cell, i.e. reproduction
+1. Any live cell with fewer than two live neighbours dies, i.e. underpopulation.
+2. Any live cell with two or three live neighbours lives on to the next generation.
+3. Any live cell with more than three live neighbours dies, i.e. overpopulation.
+4. Any dead cell with exactly three live neighbours becomes a live cell, i.e. reproduction.
 
-See [Wikipedia](https://en.wikipedia.org/wiki/Conway's_Game_of_Life) for more information on The Game of Life.
+An example of cell interaction:
 
-This implementation is built using React. A working version can be viewed [here](https://vanillaslice.github.io/ReactGameOfLife/).
+![Cell Interaction](/images/pattern-1.gif)
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+See [Wikipedia](https://en.wikipedia.org/wiki/Conway's_Game_of_Life) for more information on *The Game of Life*.
 
-## Installing dependencies
+A deployed version can be viewed [here](https://vanillaslice.github.io/ReactGameOfLife/).
+
+## Screenshot
+
+![Screenshot](/images/screenshot-1.png)
+
+## Getting Started
+
+### Prerequisites
+
+* [Node.js](https://nodejs.org/en/)
+
+### Installing Dependencies
+
+From your terminal/command prompt run:
+
 ```
-yarn install
+npm install
 ```
 
-## Running locally
+### Running
+
+From your terminal/command prompt run:
+
 ```
-yarn start
+npm start
 ```
 
-## Run tests
-```
-yarn test
-```
+This will run the development server on [localhost:3000](http://localhost:3000).
+
+## Technology Used
+
+For those of you that are interested, the technology used in this project includes:
+
+* [React](https://reactjs.org/)
+* [Redux](https://redux.js.org/)
+
+## Useful Links
+
+Resources useful for the completion of this project:
+
+* [Create React App](https://github.com/facebook/create-react-app) (React starter kit)
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
