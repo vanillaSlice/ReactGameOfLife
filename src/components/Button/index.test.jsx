@@ -5,8 +5,13 @@ import Button from './index';
 
 describe('Button', () => {
   const onClick = jest.fn();
+  const id = 'btn-id';
   const text = 'button text';
-  const button = shallow(<Button onClick={onClick} text={text} />);
+  const button = shallow(<Button id={id} onClick={onClick} text={text} />);
+
+  it('renders id', () => {
+    expect(button.prop('id')).toBe(id);
+  });
 
   it('is passed onClick function', () => {
     expect(button.props().onClick).toBe(onClick);

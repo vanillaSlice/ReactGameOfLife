@@ -162,10 +162,9 @@ class App extends Component {
     }
 
     clearInterval(interval);
-    const newInterval = setInterval(this.nextGeneration, speed);
     this.setState({
       isPlaying: true,
-      interval: newInterval,
+      interval: setInterval(this.nextGeneration, speed),
     });
   }
 
@@ -229,10 +228,9 @@ class App extends Component {
     }
 
     clearInterval(interval);
-    const newInterval = setInterval(this.nextGeneration, speed);
     this.setState({
       isPlaying: true,
-      interval: newInterval,
+      interval: setInterval(this.nextGeneration, speed),
     });
   }
 
@@ -251,10 +249,9 @@ class App extends Component {
     }
 
     clearInterval(interval);
-    const newInterval = setInterval(this.nextGeneration, speed);
     this.setState({
       isPlaying: true,
-      interval: newInterval,
+      interval: setInterval(this.nextGeneration, speed),
     });
   }
 

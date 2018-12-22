@@ -13,10 +13,10 @@ const MainControls = (props) => {
 
   return (
     <div className="main-ctrls">
-      <Button text="Play" onClick={onPlayButtonClick} />
-      <Button text="Pause" onClick={onPauseButtonClick} />
-      <Button text="Reset" onClick={onResetButtonClick} />
-      <Button text="Clear" onClick={onClearButtonClick} />
+      <Button id="play" text="Play" onClick={onPlayButtonClick} />
+      <Button id="pause" text="Pause" onClick={onPauseButtonClick} />
+      <Button id="reset" text="Reset" onClick={onResetButtonClick} />
+      <Button id="clear" text="Clear" onClick={onClearButtonClick} />
     </div>
   );
 };
