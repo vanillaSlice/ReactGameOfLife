@@ -22,7 +22,7 @@ An example of cell interaction:
 
 See [Wikipedia](https://en.wikipedia.org/wiki/Conway's_Game_of_Life) for more information on *The Game of Life*.
 
-A deployed version can be viewed [here](https://vanillaslice.github.io/ReactGameOfLife/).
+A deployed version can be viewed [here](https://reactgameoflife.mikelowe.xyz/).
 
 ## Screenshot
 
