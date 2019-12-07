@@ -1,7 +1,7 @@
 # React Game of Life
 
 [![Latest Release](https://img.shields.io/github/release/vanillaSlice/ReactGameOfLife.svg)](https://github.com/vanillaSlice/ReactGameOfLife/releases/latest)
-[![Build Status](https://img.shields.io/travis/vanillaSlice/ReactGameOfLife/master.svg)](https://travis-ci.org/vanillaSlice/ReactGameOfLife)
+[![Build Status](https://img.shields.io/travis/com/vanillaSlice/ReactGameOfLife/master.svg)](https://travis-ci.com/vanillaSlice/ReactGameOfLife)
 [![Coverage Status](https://img.shields.io/coveralls/github/vanillaSlice/ReactGameOfLife/master.svg)](https://coveralls.io/github/vanillaSlice/ReactGameOfLife?branch=master)
 [![License](https://img.shields.io/github/license/vanillaSlice/ReactGameOfLife.svg)](LICENSE)
 
